@@ -23,22 +23,65 @@ function newConnection(socket) {
   console.log("new connection " + socket.id);
   //events setup for communication
   socket.on('disconnect', clientDisconnection)
-  socket.on('message', clientDataMessage)
+  socket.on('message', clientMessage)
+  socket.on('data', clientData)
 
   //on connection
   socket.join("room")
   //send test message
-  io.to("room").emit('message', 'hello ! users online:' + connections)
+  io.to("room").emit('message', 'users online:' + connections)
 
-  function clientDataMessage(data) {
+  function clientMessage(data) {
     console.log(data);
-
     //socket.broadcast.emit('message', data) // only others
     //io.sockets.emit('message', data) //everyone connected
 
   }
+
+  function clientData(dataString) {
+    try {
+      var data = JSON.parse(dataString)
+      if (data.request == "createLobby") {
+        createLobby(data)
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   function clientDisconnection(data) {
     connections--;
-
+    io.to("room").emit('message', 'users online:' + connections)
   }
+
+
+}
+
+
+
+
+
+///lobbies
+
+var lobbies_list = []
+
+
+
+
+
+function createLobby(data) {
+  var new_lobby = {
+    'lobby_id': data.lobby_id,
+    'song_id': data.song_id,
+    'title': data.title,
+    'artist': data.artist,
+    'difficulty': data.difficulty,
+    'owner': data.owner,
+    'private': data.private,
+    'start_time': data.start_time,
+    'player_limit': data.player_limit
+  }
+  console.log(data);
+  lobbies_list[lobbies_list.length] = new_lobby
+
 }
