@@ -39,6 +39,7 @@ function newConnection(socket) {
   }
 
   function clientData(dataString) {
+    console.log(dataString);
     try {
       var data = JSON.parse(dataString)
       if (data.request == "createLobby") {
@@ -94,7 +95,7 @@ function createLobby(data) {
     'player_limit': data.player_limit,
     'player_count': 0
   }
-  console.log(new_lobby);
+  console.log("lobby created");
   lobbies_list[lobbies_list.length] = new_lobby
 
   sendLobbiesList() //sends the update
