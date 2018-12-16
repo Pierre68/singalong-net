@@ -10,6 +10,8 @@ var server = app.listen(SERVER_PORT)
 console.log("........... on port : " + SERVER_PORT);
 app.use(express.static('public'))
 
+console.log("server version " + server_version);
+
 //=============================================================================
 
 var io = socket(server)
@@ -106,10 +108,10 @@ function createLobby(data) {
 
 function sendLobbiesList(socketId) {
   removeOldLobbies()
-
+  console.log(lobbies_list);
   var list = []
   for (var i = 0; i < lobbies_list.length; i++) {
-    if(lobbies_list[i].private){
+    if(lobbies_list[i].private ==1){
       continue;
     }
     list[list.length] = lobbies_list[i]
