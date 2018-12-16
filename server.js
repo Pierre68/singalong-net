@@ -43,6 +43,10 @@ function newConnection(socket) {
       var data = JSON.parse(dataString)
       if (data.request == "createLobby") {
         createLobby(data)
+      }else if (data.request == "changeRoom") {
+        changeRoom(data)
+      }else if (data.request == "lobbiesList") {
+        sendLobbiesList(socket.id)
       }
     } catch (e) {
       console.log(e);
@@ -54,8 +58,16 @@ function newConnection(socket) {
     io.to("room").emit('message', 'users online:' + connections)
   }
 
+  function changeRoom(data) {
+    socket.join(data.room)
+  }
+
 
 }
+
+
+
+
 
 
 
@@ -79,9 +91,51 @@ function createLobby(data) {
     'owner': data.owner,
     'private': data.private,
     'start_time': data.start_time,
-    'player_limit': data.player_limit
+    'player_limit': data.player_limit,
+    'player_count': 0
   }
-  console.log(data);
+  console.log(new_lobby);
   lobbies_list[lobbies_list.length] = new_lobby
 
+  sendLobbiesList() //sends the update
+}
+
+
+function sendLobbiesList(socketId) {
+  removeOldLobbies()
+
+  var list = []
+  for (var i = 0; i < lobbies_list.length; i++) {
+    if(lobbies_list[i].private){
+      continue;
+    }
+    list[list.length] = lobbies_list[i]
+  }
+
+  io.clients[socketId].send("data",JSON.stringify(list))
+}
+
+function sendLobbiesList() {
+  removeOldLobbies()
+
+  var list = []
+  for (var i = 0; i < lobbies_list.length; i++) {
+    if(lobbies_list[i].private){
+      continue;
+    }
+    list[list.length] = lobbies_list[i]
+  }
+
+  io.to("lobbies_list").emit("data",JSON.stringify(list))
+}
+
+
+function removeOldLobbies() {
+  var d = new Date();
+  var n = d.getTime()/1000;
+  for (var i = 0; i < lobbies_list.length; i++) {
+    if(lobbies_list[i].start_time <= n){
+      lobbies_list.splice(i,1) //removes an emplty lobby
+    }
+  }
 }
