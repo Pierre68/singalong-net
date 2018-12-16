@@ -125,7 +125,7 @@ function sendLobbiesList() {
     }
     list[list.length] = lobbies_list[i]
   }
-  var listdata {'list' : list}
+  var listdata = {'list' : list}
 
   io.to("lobbies_list").emit("data",JSON.stringify(listdata))
 }
