@@ -44,8 +44,10 @@ function newConnection(socket) {
       if (data.request == "createLobby") {
         createLobby(data)
       }else if (data.request == "changeRoom") {
+        console.log("changing room");
         changeRoom(data)
       }else if (data.request == "lobbiesList") {
+        console.log("lobbies send");
         sendLobbiesList(socket.id)
       }
     } catch (e) {
