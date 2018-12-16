@@ -1,5 +1,5 @@
 console.log("launching app")
-const server_version = "0.1.0"
+const server_version = "0.1.2"
 
 var express = require('express')
 var socket = require('socket.io')
