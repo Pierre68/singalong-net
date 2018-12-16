@@ -88,16 +88,16 @@ var lobbies_list = []
 
 function createLobby(data) {
   var new_lobby = {
-    'lobby_id': data.lobby_id,
-    'song_id': data.song_id,
-    'title': data.title,
-    'artist': data.artist,
-    'difficulty': data.difficulty,
-    'owner': data.owner,
-    'private': data.private,
-    'start_time': data.start_time,
-    'player_limit': data.player_limit,
-    'player_count': 0
+    "lobby_id": data.lobby_id,
+    "song_id": data.song_id,
+    "title": data.title,
+    "artist": data.artist,
+    "difficulty": data.difficulty,
+    "owner": data.owner,
+    "private": data.private,
+    "start_time": data.start_time,
+    "player_limit": data.player_limit,
+    "player_count": 0
   }
   console.log("lobby created");
   lobbies_list[lobbies_list.length] = new_lobby
