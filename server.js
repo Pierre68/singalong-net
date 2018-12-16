@@ -39,7 +39,6 @@ function newConnection(socket) {
   }
 
   function clientData(dataString) {
-    console.log(dataString);
     try {
       var data = JSON.parse(dataString)
       if (data.request == "createLobby") {
@@ -50,6 +49,7 @@ function newConnection(socket) {
         sendLobbiesList(socket.id)
       }
     } catch (e) {
+      console.log(dataString);
       console.log(e);
     }
   }
@@ -112,8 +112,8 @@ function sendLobbiesList(socketId) {
     }
     list[list.length] = lobbies_list[i]
   }
-
-  io.clients[socketId].send("data",JSON.stringify(list))
+  var listdata = {'list' : list}
+  io.clients[socketId].send("data",JSON.stringify(listdata))
 }
 
 function sendLobbiesList() {
@@ -127,7 +127,6 @@ function sendLobbiesList() {
     list[list.length] = lobbies_list[i]
   }
   var listdata = {'list' : list}
-
   io.to("lobbies_list").emit("data",JSON.stringify(listdata))
 }
 
