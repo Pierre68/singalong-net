@@ -22,7 +22,7 @@ var connections = 0
 
 function newConnection(socket) {
   connections++;
-  console.log("new connection:" + socket.id + " IP:" + socket.handshake.address.address);
+  console.log("new connection:" + socket.id + " IP:" + client.request.connection._peername.address); // je sais pas si ca marche
   //events setup for communication
   socket.on('disconnect', clientDisconnection)
   socket.on('message', clientMessage)
