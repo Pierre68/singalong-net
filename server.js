@@ -46,7 +46,6 @@ function newConnection(socket) {
       if (data.request == "createLobby") {
         createLobby(data)
       }else if (data.request == "changeRoom") {
-        console.log("changing room");
         changeRoom(data)
       }else if (data.request == "lobbiesList") {
         console.log("lobbies send");
@@ -64,6 +63,7 @@ function newConnection(socket) {
   }
 
   function changeRoom(data) {
+    console.log("changing room: " + data.room);
     socket.join(data.room)
   }
 
