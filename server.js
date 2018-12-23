@@ -51,9 +51,9 @@ function newConnection(socket) {
         console.log("lobbies send");
         sendLobbiesList(socket.id)
       }else if (data.request == "chat") {
-        sendToRoom(data, socket.id)
+        sendMessageToRoom(data, socket.id)
       }else if (data.request == "score") {
-        sendToRoom(data, socket.id)
+        sendScoreToRoom(data, socket.id)
       }
 
     } catch (e) {
@@ -72,9 +72,40 @@ function newConnection(socket) {
     socket.join(data.room)
   }
 
-  function sendToRoom(data, id){
+  function sendMessageToRoom(data, id){
     var room = io.sockets.manager.roomClients[id]
-    io.to(room).emit('data', data)
+
+    var message = data.message
+    var secure_message = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    message = message.replace(" ", "")
+    if(message === "")return;
+
+    var server_message_data = {
+      "request": "chat",
+      "custom_name": data.custom_name.replace(/</g, "&lt;").replace(/>/g, "&gt;"),
+      "message": secure_message
+    }
+
+    io.to(room).emit('data', JSON.stringify(server_message_data))
+  }
+
+  function sendScoreToRoom(data, id){
+    var room = io.sockets.manager.roomClients[id]
+    var score = data.score
+
+    var message = score + ""
+    if(isNaN(message))return
+    var secure_message = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    if(secure_message != message)return
+    if(score > 100 or score < 0)return
+
+    var server_message_data = {
+      "request": "score",
+      "custom_name": data.custom_name.replace(/</g, "&lt;").replace(/>/g, "&gt;"),
+      "score": score
+    }
+
+    io.to(room).emit('data', JSON.stringify(server_message_data))
   }
 
 }
