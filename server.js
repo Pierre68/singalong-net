@@ -97,7 +97,7 @@ function newConnection(socket) {
     if(isNaN(message))return
     var secure_message = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
     if(secure_message != message)return
-    if(score > 100 or score < 0)return
+    if(score > 100 || score < 0)return
 
     var server_message_data = {
       "request": "score",
