@@ -76,8 +76,9 @@ function newConnection(socket) {
   function sendMessageToRoom(data, id){
 
     var message = data.message
-    var secure_message = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    message = message.replace(" ", "")
+    var secure_message = JSON.parse(JSON.stringify(message.replace(/</g, "&lt;").replace(/>/g, "&gt;")));
+
+    message = message.replace(/ /g, "")
     if(message === "")return;
 
     var server_message_data = {
