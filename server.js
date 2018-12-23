@@ -50,7 +50,12 @@ function newConnection(socket) {
       }else if (data.request == "lobbiesList") {
         console.log("lobbies send");
         sendLobbiesList(socket.id)
+      }else if (data.request == "chat") {
+        sendToRoom(data, socket.id)
+      }else if (data.request == "score") {
+        sendToRoom(data, socket.id)
       }
+
     } catch (e) {
       console.log(dataString);
       console.log(e);
@@ -67,11 +72,12 @@ function newConnection(socket) {
     socket.join(data.room)
   }
 
+  function sendToRoom(data, id){
+    var room = io.sockets.manager.roomClients[id]
+    io.to(room).emit('data', data)
+  }
 
 }
-
-
-
 
 
 
@@ -81,8 +87,6 @@ function newConnection(socket) {
 ///lobbies
 
 var lobbies_list = []
-
-
 
 
 
