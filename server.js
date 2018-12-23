@@ -70,10 +70,10 @@ function newConnection(socket) {
   function changeRoom(data) {
     console.log("changing room: " + data.room);
     socket.join(data.room)
+    this.user_room = data.room
   }
 
   function sendMessageToRoom(data, id){
-    var room = io.sockets.manager.roomClients[id]
 
     var message = data.message
     var secure_message = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -86,11 +86,10 @@ function newConnection(socket) {
       "message": secure_message
     }
 
-    io.to(room).emit('data', JSON.stringify(server_message_data))
+    io.to(this.user_room).emit('data', JSON.stringify(server_message_data))
   }
 
   function sendScoreToRoom(data, id){
-    var room = io.sockets.manager.roomClients[id]
     var score = data.score
 
     var message = score + ""
@@ -105,7 +104,7 @@ function newConnection(socket) {
       "score": score
     }
 
-    io.to(room).emit('data', JSON.stringify(server_message_data))
+    io.to(this.user_room).emit('data', JSON.stringify(server_message_data))
   }
 
 }
